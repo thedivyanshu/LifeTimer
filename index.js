@@ -45,9 +45,7 @@ const toggleDobSelector = () => {
         secondEl.innerHTML = makeTwoDigitNumber(second);
 
     };
-    const setDob = () =>{
-        const dateString = dobInput.value;
-        dateOfBirth = dateString ? new Date(dateString) :null;
+    const localStorageGetter =() =>{
         const year = localStorage.getItem('year');
         const month = localStorage.getItem('month');
         const date = localStorage.getItem('date');
@@ -57,18 +55,14 @@ const toggleDobSelector = () => {
         if (year && month && date && hour && minute && second){
             dateOfBirth = new Date(year,month,date,hour,minute,second)
         }
-
-
+        updateAge();
+    };
+    const contentToggler = () => {
+        updateAge();
         if(dateOfBirth){
-            localStorage.setItem("year",dateOfBirth.getFullYear());
-            localStorage.setItem("month",dateOfBirth.getMonth());
-            localStorage.setItem("date",dateOfBirth.getDate());
-            localStorage.setItem("hour",dateOfBirth.getHours());
-            localStorage.setItem("minute",dateOfBirth.getMinutes());
-            localStorage.setItem("second",dateOfBirth.getSeconds());
             initial.classList.add("hide");
             after.classList.remove("hide");
-            setInterval(()=>updateAge(),1000)
+         
         }
 
         else{
@@ -76,7 +70,22 @@ const toggleDobSelector = () => {
             initial.classList.remove("hide");
         }
     };
-    setDob();
+    const setDob = () =>{
+        const dateString = dobInput.value;
+        dateOfBirth = dateString ? new Date(dateString) :null;
+        if(dateOfBirth){
+            localStorage.setItem("year",dateOfBirth.getFullYear());
+            localStorage.setItem("month",dateOfBirth.getMonth());
+            localStorage.setItem("date",dateOfBirth.getDate());
+            localStorage.setItem("hour",dateOfBirth.getHours());
+            localStorage.setItem("minute",dateOfBirth.getMinutes());
+            localStorage.setItem("second",dateOfBirth.getSeconds());
+        }
+            contentToggler();
+            setInterval(()=>updateAge(),1000)
+        
+    };
+    localStorageGetter();
     
  settingCog.addEventListener('click',toggleDobSelector);
  dobButton.addEventListener('click',setDob);
